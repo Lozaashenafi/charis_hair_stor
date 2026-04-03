@@ -21,7 +21,7 @@ export default function DeleteProductButton({ id }: { id: number }) {
     <button 
       onClick={handleDelete}
       disabled={loading}
-      className="p-2 bg-white/5 rounded-lg hover:bg-red-500 hover:text-white transition-all disabled:opacity-50"
+                className="flex-1 bg-[#f5f1ed] text-[#3d342a] py-3.5 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest border border-[#8b6545]/10 hover:bg-white transition-all"
     >
       <Trash2 size={16} />
     </button>
