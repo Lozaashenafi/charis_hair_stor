@@ -73,12 +73,12 @@ export async function register(formData: FormData) {
     email,
     password,
      options: {
-      // This tells Supabase NOT to redirect to a confirmation page
       emailRedirectTo: undefined, 
     }
   })
 
   if (error) {
+    console.error("Supabase Error during registration:", error)
     return { error: error.message }
   }
 
