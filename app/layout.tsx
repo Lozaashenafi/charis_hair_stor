@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     siteName: "Charis Store Canada",
     images: [
       {
-        url: "/banner.jpg", // The image from your public folder
+        url: "/banner1.png", // The image from your public folder
         width: 1200,
         height: 630,
         alt: "Charis Store Luxury Hair Collection",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Charis Store | Luxury Human Hair",
     description: "Premium hair masterpieces delivered worldwide.",
-    images: ["/banner1.jpg"],
+    images: ["/banner1.png"],
   },
   icons: {
     icon: "/favicon.ico",
