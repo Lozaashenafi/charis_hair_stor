@@ -23,7 +23,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile Header - Matches your Top Bar */}
-      <div className="lg:hidden flex items-center justify-between p-4 bg-[#3d342a] border-b border-white/10 sticky top-0 z-50 shadow-md">
+      <div className="lg:hidden flex items-center justify-between p-4 bg-[#37241d] border-b border-white/10 sticky top-0 z-50 shadow-md">
         <Link href="/" className="text-[#d4a574] text-xl font-bold tracking-[0.2em] font-serif uppercase">
           Charis Admin
         </Link>
@@ -63,7 +63,7 @@ export default function Sidebar() {
                 href={link.href} 
                 className={`flex items-center gap-4 px-5 py-4 rounded-xl transition-all duration-200 group ${
                   isActive 
-                  ? 'bg-[#3d342a] text-[#d4a574] shadow-lg shadow-black/20 font-bold translate-x-1' 
+                  ? 'bg-[#37241d] text-[#d4a574] shadow-lg shadow-black/20 font-bold translate-x-1' 
                   : 'text-white/80 hover:bg-white/10 hover:text-white'
                 }`}
               >
@@ -77,7 +77,7 @@ export default function Sidebar() {
         </nav>
 
         {/* Bottom Section */}
-        <div className="p-6 border-t border-white/10 bg-[#3d342a]/30">
+        <div className="p-6 border-t border-white/10 bg-[#37241d]/30">
            <LogoutButton />
            <p className="mt-4 text-[10px] text-white/40 text-center uppercase tracking-widest">
              Charis Store Canada

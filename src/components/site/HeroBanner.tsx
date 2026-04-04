@@ -2,42 +2,48 @@ import Image from 'next/image';
 
 export default function HeroBanner() {
   return (
-    <section className="relative aspect-[21/9] w-full overflow-hidden bg-white">
-      {/* Main image of the model */}
-      <Image
-        src="/images/main-banner.webp" // Generate this new model image
-        alt="Model showcasing luxurious hair"
-        fill
-        className="object-cover object-center"
-        priority
-      />
-
-      {/* Text & Logo Overlays (Positioned to match layout) */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-12">
-        <div className="text-center">
+      <section className="relative h-[500px] md:h-[600px] overflow-hidden bg-gradient-to-br from-[#7a6d63] via-[#8b6f47] to-[#5d4e42]">
+        <div className="absolute inset-0">
           <Image
-            src="/images/gracy-logo-main.webp" // This logo (from the center in image_0.png)
-            alt="Gracy Store"
-            width={400} height={150}
-            className="mb-2"
+            src="/banner.JPG"
+            alt="Charis Hair Store Hero"
+            fill
+            className="object-cover opacity-50"
+            priority
           />
-          <p className="text-white text-sm uppercase tracking-[.3em]">WORLD WIDE SHIPPING</p>
         </div>
-      </div>
+        
+        <div className="absolute inset-0 bg-gradient-to-r from-[#5d4e42] via-[#8b6f47]/40 to-transparent"></div>
 
-      {/* Floating Shopping Bag with 20% off Tag */}
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-80 max-w-[30%]">
-        <Image
-          src="/images/bag.webp" // Generate a clean image of a black bag
-          alt="Shopping Bag"
-          width={320} height={380}
-          className="object-contain"
-        />
-        <div className="absolute bottom-10 left-5 bg-white border border-gray-300 rounded p-2 flex flex-col items-center">
-           <span className="text-xl font-bold">20%</span>
-           <span className="text-xs uppercase text-gray-500">off</span>
+        <div className="relative h-full container mx-auto px-4 flex items-center">
+          <div className="flex flex-col md:flex-row items-center justify-between w-full gap-8">
+            <div className="w-full md:w-1/2 flex justify-center">
+              <div className="relative w-64 h-80 md:w-72 md:h-96">
+                <Image
+                  src="/banner.JPG"
+                  alt="Charis Store Woman"
+                  fill
+                  className="object-cover rounded-lg shadow-2xl"
+                  priority
+                />
+              </div>
+            </div>
+
+            <div className="w-full md:w-1/2 text-center md:text-right z-10">
+              
+              <h1 className="text-4xl md:text-6xl font-bold text-[#f5f1ed] mb-3 drop-shadow-lg">
+                CHARIS
+              </h1>
+              <h2 className="text-2xl md:text-4xl font-bold text-[#d4a574] mb-6 drop-shadow-lg">
+                STORE
+              </h2>
+              <p className="text-[#f5f1ed] text-lg md:text-2xl font-light tracking-widest mb-8 drop-shadow">
+                WORLD WIDE SHIPPING
+              </p>
+
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 }

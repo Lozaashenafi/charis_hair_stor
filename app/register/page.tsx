@@ -31,7 +31,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f1ed] flex flex-col items-center justify-center p-4">
-      <Link href="/login" className="mb-6 flex items-center gap-2 text-[#3d342a] hover:text-[#8b6f47] transition-colors self-start max-w-md mx-auto w-full px-2">
+      <Link href="/login" className="mb-6 flex items-center gap-2 text-[#37241d] hover:text-[#8b6f47] transition-colors self-start max-w-md mx-auto w-full px-2">
         <ArrowLeft size={18} />
         <span className="text-sm font-medium">Back to Login</span>
       </Link>
@@ -56,35 +56,35 @@ export default function RegisterPage() {
           )}
 
           <div className="space-y-1">
-            <label className="text-xs font-bold uppercase text-[#3d342a]/60 ml-1">Full Name</label>
+            <label className="text-xs font-bold uppercase text-[#37241d]/60 ml-1">Full Name</label>
             <div className="relative">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8b6f47]" size={18} />
               <input
                 name="displayName" // Must match actions.ts
                 type="text"
                 required
-                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] outline-none transition text-[#3d342a]"
+                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] outline-none transition text-[#37241d]"
                 placeholder="Jane Doe"
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-bold uppercase text-[#3d342a]/60 ml-1">Email Address</label>
+            <label className="text-xs font-bold uppercase text-[#37241d]/60 ml-1">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8b6f47]" size={18} />
               <input
                 name="email" // Must match actions.ts
                 type="email"
                 required
-                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] outline-none transition text-[#3d342a]"
+                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] outline-none transition text-[#37241d]"
                 placeholder="jane@example.com"
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-bold uppercase text-[#3d342a]/60 ml-1">Password</label>
+            <label className="text-xs font-bold uppercase text-[#37241d]/60 ml-1">Password</label>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8b6f47]" size={18} />
               <input
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                 type="password"
                 required
                 minLength={6}
-                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] outline-none transition text-[#3d342a]"
+                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] outline-none transition text-[#37241d]"
                 placeholder="Minimum 6 characters"
               />
             </div>
@@ -101,7 +101,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#8b6545] hover:bg-[#3d342a] text-white font-bold py-4 rounded-xl mt-4 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
+            className="w-full bg-[#8b6545] hover:bg-[#37241d] text-white font-bold py-4 rounded-xl mt-4 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 className="animate-spin" size={20} /> : "CREATE ACCOUNT"}
           </button>

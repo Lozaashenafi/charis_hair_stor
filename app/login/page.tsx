@@ -37,14 +37,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f1ed] flex flex-col items-center justify-center p-4">
-      <Link href="/" className="mb-6 flex items-center gap-2 text-[#3d342a] hover:text-[#8b6f47] transition-colors self-start max-w-md mx-auto w-full px-2">
+      <Link href="/" className="mb-6 flex items-center gap-2 text-[#37241d] hover:text-[#8b6f47] transition-colors self-start max-w-md mx-auto w-full px-2">
         <ArrowLeft size={18} />
         <span className="text-sm font-medium">Back to Shop</span>
       </Link>
 
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#d4a574]/20">
         {/* Aesthetic Header */}
-        <div className="bg-[#3d342a] p-10 flex flex-col items-center text-center">
+        <div className="bg-[#37241d] p-10 flex flex-col items-center text-center">
           <Image src="/logo.png" alt="Charis Logo" width={140} height={50} className="mb-4 object-contain" />
           <h1 className="text-[#d4a574] text-2xl font-serif tracking-tight">Welcome Back</h1>
           <p className="text-[#f5f1ed]/50 text-sm mt-1 uppercase tracking-widest">Sign in to your account</p>
@@ -58,13 +58,13 @@ export default function LoginPage() {
           )}
 
           <div className="space-y-2">
-            <label className="text-xs font-bold uppercase text-[#3d342a]/60 ml-1">Email Address</label>
+            <label className="text-xs font-bold uppercase text-[#37241d]/60 ml-1">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8b6f47]" size={18} />
               <input
                 type="email"
                 required
-                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] focus:bg-white outline-none transition text-[#3d342a]"
+                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] focus:bg-white outline-none transition text-[#37241d]"
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -73,13 +73,13 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold uppercase text-[#3d342a]/60 ml-1">Password</label>
+            <label className="text-xs font-bold uppercase text-[#37241d]/60 ml-1">Password</label>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8b6f47]" size={18} />
               <input
                 type="password"
                 required
-                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] focus:bg-white outline-none transition text-[#3d342a]"
+                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47] focus:bg-white outline-none transition text-[#37241d]"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -90,7 +90,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#3d342a] hover:bg-[#2d2520] text-[#d4a574] font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
+            className="w-full bg-[#37241d] hover:bg-[#2d2520] text-[#d4a574] font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 className="animate-spin" size={20} /> : "SIGN IN"}
           </button>

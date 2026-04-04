@@ -9,7 +9,7 @@ export default async function AdminDashboard() {
     <div className="space-y-10 pb-20 px-4 md:px-0">
       {/* Welcome Header */}
       <header className="pt-6">
-        <h1 className="font-serif text-4xl md:text-6xl text-[#3d342a] italic lowercase">
+        <h1 className="font-serif text-4xl md:text-6xl text-[#37241d] italic lowercase">
           Overview.
         </h1>
         <p className="text-[#8b6545] text-[10px] uppercase tracking-[0.5em] mt-4 font-bold border-l-2 border-[#d4a574] pl-4">
@@ -42,7 +42,7 @@ export default async function AdminDashboard() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
         {/* Inventory Card */}
-        <div className="bg-[#3d342a] border border-[#8b6545]/30 p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group">
+        <div className="bg-[#37241d] border border-[#8b6545]/30 p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group">
           <div className="relative z-10">
             <div className="text-[#d4a574] mb-6 opacity-80 group-hover:opacity-100 transition-opacity">
                <Box size={32} />
@@ -64,7 +64,7 @@ export default async function AdminDashboard() {
         {/* Brand Card */}
         <div className="bg-[#8b6545] border border-white/10 p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group">
           <div className="relative z-10">
-             <div className="text-[#3d342a] mb-6 opacity-80 group-hover:opacity-100 transition-opacity">
+             <div className="text-[#37241d] mb-6 opacity-80 group-hover:opacity-100 transition-opacity">
                <ShieldCheck size={32} />
             </div>
             <h3 className="text-white font-serif text-3xl italic mb-4">Brand Presence</h3>
@@ -89,7 +89,7 @@ function StatCard({ title, value, icon, subtitle }: any) {
   return (
     <div className="bg-[#d1c1b5] border border-[#8b6545]/10 p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl hover:border-[#d4a574]/40 transition-all duration-300 group">
       <div className="flex items-center justify-between mb-8">
-        <div className="p-4 bg-[#3d342a] rounded-2xl shadow-inner group-hover:bg-[#2d2520] transition-colors">
+        <div className="p-4 bg-[#37241d] rounded-2xl shadow-inner group-hover:bg-[#2d2520] transition-colors">
           {icon}
         </div>
         <div className="flex flex-col items-end">
@@ -102,7 +102,7 @@ function StatCard({ title, value, icon, subtitle }: any) {
       
       <h3 className="text-[#8b6545] text-[11px] uppercase tracking-[0.2em] font-bold mb-2">{title}</h3>
       <div className="flex items-baseline gap-2">
-        <p className="text-[#3d342a] text-5xl font-serif italic">{value}</p>
+        <p className="text-[#37241d] text-5xl font-serif italic">{value}</p>
       </div>
       
       <div className="mt-6 pt-6 border-t border-[#8b6545]/5">

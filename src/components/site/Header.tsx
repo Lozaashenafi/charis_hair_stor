@@ -11,7 +11,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-[#3d342a] text-[#f5f1ed] sticky top-0 z-50">
+      <header className="bg-[#37241d] text-[#f5f1ed] sticky top-0 z-50">
         {/* Top Bar */}
         <div className="flex items-center justify-between px-4 py-4 h-20 border-b border-[#5d4e42]">
           
@@ -52,7 +52,7 @@ export default function Header() {
             <User size={20} className="hidden md:block cursor-pointer hover:text-[#d4a574]" />
             <div className="relative cursor-pointer">
               <ShoppingBag size={20} className="hover:text-[#d4a574]" />
-              <span className="absolute -top-1 -right-1 bg-white text-[#3d342a] text-[10px] font-bold px-1 rounded-full">
+              <span className="absolute -top-1 -right-1 bg-white text-[#37241d] text-[10px] font-bold px-1 rounded-full">
                 1
               </span>
             </div>

@@ -73,13 +73,13 @@ export default function NewProductPageForm({ categories }: { categories: Categor
   return (
     <div className="max-w-6xl mx-auto pb-20 px-4">
       <header className="mb-10 mt-6 text-center lg:text-left">
-        <h1 className="font-serif text-4xl md:text-6xl text-[#3d342a] italic lowercase">New Masterpiece.</h1>
+        <h1 className="font-serif text-4xl md:text-6xl text-[#37241d] italic lowercase">New Masterpiece.</h1>
         <p className="text-[#8b6545] text-[10px] uppercase tracking-[0.4em] font-black mt-4">Archive to Luxury Vault</p>
       </header>
       
       <form onSubmit={handleSubmit} className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12">
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-[#3d342a] border border-[#8b6545]/20 p-6 rounded-[2.5rem] shadow-2xl">
+          <div className="bg-[#37241d] border border-[#8b6545]/20 p-6 rounded-[2.5rem] shadow-2xl">
              <ImageUpload 
                 urls={imageUrls} 
                 onUploadComplete={(url) => setImageUrls(prev => [...prev, url])} 
@@ -88,7 +88,7 @@ export default function NewProductPageForm({ categories }: { categories: Categor
           </div>
         </div>
 
-        <div className="lg:col-span-8 space-y-8 bg-[#3d342a] p-6 md:p-12 border border-[#8b6545]/20 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl">
+        <div className="lg:col-span-8 space-y-8 bg-[#37241d] p-6 md:p-12 border border-[#8b6545]/20 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl">
           
           {/* Section 1: Identity & Pricing */}
           <div className="space-y-6">
@@ -236,7 +236,7 @@ export default function NewProductPageForm({ categories }: { categories: Categor
             <input name="colors" type="text" className={inputClass} placeholder="Natural Black, #613, #1B (Comma separated)" />
           </div>
 
-          <button disabled={loading} className="w-full bg-[#d4a574] text-[#3d342a] font-black py-6 rounded-2xl shadow-2xl active:scale-95 transition-all uppercase tracking-widest text-xs">
+          <button disabled={loading} className="w-full bg-[#d4a574] text-[#37241d] font-black py-6 rounded-2xl shadow-2xl active:scale-95 transition-all uppercase tracking-widest text-xs">
             {loading ? 'SYNCHRONIZING...' : 'CREATE MASTERPIECE'}
           </button>
         </div>

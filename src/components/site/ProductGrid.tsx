@@ -1,82 +1,101 @@
-import Image from 'next/image';
+'use client'
+import React, { useState } from 'react'
+import Image from 'next/image'
+import PublicProductModal from '@/components/site/PublicProductModal'
 
-export interface Product {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
+interface ProductGridProps {
+  products: any[];
+  company: any;
 }
 
-const productsData: Product[] = [
-  {
-    id: 1,
-    name: "Body Wave - Double Drawn 13x4",
-    price: "349,00 PLN",
-    image: "https://images.unsplash.com/photo-1595475241929-309d9a0c76d8?q=80&w=500&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    name: "Deep Wave Luxury Bundle",
-    price: "323,00 PLN",
-    image: "https://images.unsplash.com/photo-1620331311520-246422ff83f9?q=80&w=500&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    name: "Straight Silk Human Hair",
-    price: "299,00 PLN",
-    image: "https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?q=80&w=500&auto=format&fit=crop"
-  },
-  {
-    id: 4,
-    name: "Kinky Curly Frontal Wig",
-    price: "420,00 PLN",
-    image: "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?q=80&w=500&auto=format&fit=crop"
-  },
-  {
-    id: 5,
-    name: "Loose Wave Caribbean Series",
-    price: "360,00 PLN",
-    image: "https://images.unsplash.com/photo-1552046122-03184de85e08?q=80&w=500&auto=format&fit=crop"
-  },
-  {
-    id: 6,
-    name: "Honey Blonde Highlights 5x5",
-    price: "390,00 PLN",
-    image: "https://images.unsplash.com/photo-1610432240166-41f23758b901?q=80&w=500&auto=format&fit=crop"
-  },
-  {
-    id: 7,
-    name: "Natural Black Pixie Cut",
-    price: "195,00 PLN",
-    image: "https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?q=80&w=500&auto=format&fit=crop"
-  },
-  {
-    id: 8,
-    name: "Burgundy Red Body Wave",
-    price: "410,00 PLN",
-    image: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?q=80&w=500&auto=format&fit=crop"
-  }
-];
+export default function ProductGrid({ products, company }: ProductGridProps) {
+  const [selectedProduct, setSelectedProduct] = useState<any>(null)
 
-export default function ProductGrid() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {productsData.map((product) => (
-        <div key={product.id} className="bg-brand-dark p-1 group">
-          <div className="aspect-[4/5] relative overflow-hidden mb-3">
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+    <section className="py-10">
+      {/* --- DYNAMIC GRID --- */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+        {products.map((product) => (
+          <div 
+            key={product.id} 
+            className="group cursor-pointer" 
+            onClick={() => setSelectedProduct(product)}
+          >
+            {/* Image Container */}
+            <div className="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 border border-white/5 relative shadow-2xl transition-all group-hover:border-[#C5A059]/30">
+              
+              {/* Sale Badge */}
+              {product.isOnSale && (
+                <div className="absolute top-5 left-5 z-20 bg-red-600 text-white text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-lg animate-pulse">
+                  Sale
+                </div>
+              )}
+
+              {/* Origin Badge */}
+              <div className="absolute top-5 right-5 px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-[#C5A059]/20 text-[8px] text-[#C5A059] uppercase tracking-widest font-black z-10">
+                {product.origin || 'Premium'}
+              </div>
+
+              {/* Product Image */}
+              {product.images && product.images[0] ? (
+                <Image 
+                  src={product.images[0].imageUrl} 
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-zinc-800">
+                  No Image
+                </div>
+              )}
+              
+              {/* Subtle Overlay on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
+
+            {/* Product Details */}
+            <div className="space-y-2 px-2">
+                <span className="text-[#C5A059] text-[9px] uppercase tracking-[0.4em] font-black opacity-80">
+                    {product.texture || product.hairType}
+                </span>
+                
+                <h3 className="text-white text-xl font-serif italic group-hover:text-[#C5A059] transition-colors leading-tight">
+                    {product.name}
+                </h3>
+                
+                <div className="flex items-center gap-4 pt-1">
+                  <p className="text-white text-2xl font-serif font-medium">
+                    ${(product.price / 100).toFixed(2)}
+                  </p>
+                  
+                  {product.isOnSale && product.previousPrice && (
+                    <p className="text-zinc-600 text-sm line-through decoration-red-600/40 italic font-light">
+                      ${(product.previousPrice / 100).toFixed(2)}
+                    </p>
+                  )}
+                </div>
+            </div>
           </div>
-          <div className="text-center px-1">
-            <h3 className="text-sm font-medium mb-1 line-clamp-1">{product.name}</h3>
-            <p className="text-brand-gold text-xs">From {product.price}</p>
-          </div>
+        ))}
+      </div>
+
+      {/* Empty State */}
+      {products.length === 0 && (
+        <div className="py-20 text-center border border-dashed border-white/10 rounded-[3rem]">
+          <p className="text-gray-500 font-serif text-xl italic tracking-widest">No pieces found in the collection...</p>
         </div>
-      ))}
-    </div>
-  );
+      )}
+
+      {/* Product Detail Modal */}
+      {selectedProduct && (
+        <PublicProductModal 
+          product={selectedProduct} 
+          company={company}
+          onClose={() => setSelectedProduct(null)} 
+        />
+      )}
+    </section>
+  )
 }

@@ -110,7 +110,7 @@ export default function EditProductForm({ product, categories }: EditProductForm
       
       {/* LEFT: IMAGE MANAGEMENT */}
       <div className="lg:col-span-4 space-y-6 order-1">
-        <div className="bg-[#3d342a] border border-[#8b6545]/20 p-6 rounded-[2.5rem] shadow-xl">
+        <div className="bg-[#37241d] border border-[#8b6545]/20 p-6 rounded-[2.5rem] shadow-xl">
           <ImageUpload 
             urls={imageUrls} 
             onUploadComplete={(url: string) => setImageUrls(prev => [...prev, url])}
@@ -120,7 +120,7 @@ export default function EditProductForm({ product, categories }: EditProductForm
       </div>
 
       {/* RIGHT: PRODUCT DETAILS */}
-      <div className="lg:col-span-8 space-y-8 bg-[#3d342a] p-6 md:p-12 border border-[#8b6545]/20 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl order-2">
+      <div className="lg:col-span-8 space-y-8 bg-[#37241d] p-6 md:p-12 border border-[#8b6545]/20 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl order-2">
         
         {/* Section 1: Basic Identity */}
         <div className="space-y-6">
@@ -283,7 +283,7 @@ export default function EditProductForm({ product, categories }: EditProductForm
           <input name="colors" defaultValue={product.colors.map((c) => c.color).join(', ')} className={inputClass} placeholder="Natural Black, #613, #1B" />
         </div>
 
-        <button disabled={loading} className="w-full bg-[#d4a574] text-[#3d342a] font-black py-6 rounded-2xl hover:bg-white transition-all tracking-[0.3em] uppercase text-xs mt-6 shadow-2xl">
+        <button disabled={loading} className="w-full bg-[#d4a574] text-[#37241d] font-black py-6 rounded-2xl hover:bg-white transition-all tracking-[0.3em] uppercase text-xs mt-6 shadow-2xl">
           {loading ? 'REFINING VAULT...' : 'UPDATE MASTERPIECE'}
         </button>
       </div>

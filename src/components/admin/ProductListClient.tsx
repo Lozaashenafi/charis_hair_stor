@@ -24,7 +24,7 @@ export default function ProductListClient({ products }: { products: any[] }) {
                 <span className="text-[9px] text-[#8b6545] uppercase tracking-widest font-bold mb-1 italic">
                   {product.hairType}
                 </span>
-                <h3 className="text-[#3d342a] font-serif text-lg leading-tight mb-2">{product.name}</h3>
+                <h3 className="text-[#37241d] font-serif text-lg leading-tight mb-2">{product.name}</h3>
                 <p className="text-[#8b6545] font-serif text-2xl font-light italic">
                   ${(product.price / 100).toFixed(2)}
                 </p>
@@ -34,13 +34,13 @@ export default function ProductListClient({ products }: { products: any[] }) {
             <div className="flex gap-2 pt-4 border-t border-[#8b6545]/5">
               <button 
                 onClick={() => setSelectedProduct(product)} 
-                className="flex-1 bg-[#f5f1ed] text-[#3d342a] py-3.5 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest border border-[#8b6545]/10 hover:bg-white transition-all"
+                className="flex-1 bg-[#f5f1ed] text-[#37241d] py-3.5 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest border border-[#8b6545]/10 hover:bg-white transition-all"
               >
                 <Eye size={14} /> View
               </button>
               <Link 
                 href={`/admin/products/${product.id}/edit`} 
-                className="flex-1 bg-[#3d342a] text-[#d4a574] py-3.5 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:bg-[#2d2520] transition-all"
+                className="flex-1 bg-[#37241d] text-[#d4a574] py-3.5 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:bg-[#2d2520] transition-all"
               >
                 <Edit2 size={14} /> Edit
               </Link>
@@ -51,7 +51,7 @@ export default function ProductListClient({ products }: { products: any[] }) {
       </div>
 
       {/* DESKTOP VIEW: High-End Vault Table */}
-      <div className="hidden md:block bg-[#3d342a] border border-[#8b6545]/20 rounded-[2.5rem] overflow-hidden shadow-2xl">
+      <div className="hidden md:block bg-[#37241d] border border-[#8b6545]/20 rounded-[2.5rem] overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[800px]">
             <thead className="bg-black/20 border-b border-white/5">
@@ -106,10 +106,10 @@ export default function ProductListClient({ products }: { products: any[] }) {
                   </td>
                   <td className="px-10 py-6">
                     <div className="flex justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                       <button onClick={() => setSelectedProduct(product)} className="p-3.5 bg-white/5 rounded-xl text-white hover:bg-[#d4a574] hover:text-[#3d342a] border border-white/10 transition-all">
+                       <button onClick={() => setSelectedProduct(product)} className="p-3.5 bg-white/5 rounded-xl text-white hover:bg-[#d4a574] hover:text-[#37241d] border border-white/10 transition-all">
                          <Eye size={18} />
                        </button>
-                       <Link href={`/admin/products/${product.id}/edit`} className="p-3.5 bg-white/5 rounded-xl text-white hover:bg-[#d4a574] hover:text-[#3d342a] border border-white/10 transition-all">
+                       <Link href={`/admin/products/${product.id}/edit`} className="p-3.5 bg-white/5 rounded-xl text-white hover:bg-[#d4a574] hover:text-[#37241d] border border-white/10 transition-all">
                          <Edit2 size={18} />
                        </Link>
                        <DeleteProductButton id={product.id} />
