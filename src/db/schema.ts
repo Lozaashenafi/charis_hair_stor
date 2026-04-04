@@ -135,6 +135,16 @@ export const faq = pgTable("faq", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  subject: text("subject"),
+  message: text("message").notNull(),
+  status: text("status").default("unread").notNull(), // unread | read | archived
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 /* =========================
    Relations
 ========================= */

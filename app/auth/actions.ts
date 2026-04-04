@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server' // Use SERVER client
 import { db } from '@/db'
-import { profiles } from '@/db/schema'
+import { messages, profiles } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -151,5 +151,30 @@ export async function updateProfileInfo(formData: FormData) {
     return { success: "Profile updated" }
   } catch (err) {
     return { error: "Failed to update database" }
+  }
+}
+
+export async function sendContactMessage(formData: FormData) {
+  const name = formData.get('name') as string;
+  const email = formData.get('email') as string;
+  const subject = formData.get('subject') as string;
+  const message = formData.get('message') as string;
+
+  if (!name || !email || !message) {
+    return { error: "Please fill in all required fields." };
+  }
+
+  try {
+    await db.insert(messages).values({
+      name,
+      email,
+      subject: subject || "General Feedback",
+      message,
+    });
+
+    return { success: "Your message has been sent to our vault. We will be in touch soon." };
+  } catch (error) {
+    console.error("Contact Error:", error);
+    return { error: "Failed to send message. Please try again later." };
   }
 }

@@ -5,6 +5,7 @@ import AboutSection from '@/components/site/AboutSection';
 import Footer from '@/components/site/Footer';
 import { getAdminProducts } from '@/services/product.service';
 import { getCompanyProfile } from '@/services/company.service';
+import GallerySection from '@/components/site/GallerySection';
 
 export default async function Home() {
     // Fetch real data from Drizzle
@@ -13,8 +14,7 @@ export default async function Home() {
     getCompanyProfile()
   ]);
   return (
-    <main className="min-h-screen">
-      <Header />
+    <>
     <HeroBanner />
       
       <section className="bg-[#37241d] px-6 py-12 md:px-16 md:py-16 text-white">
@@ -29,7 +29,7 @@ export default async function Home() {
       </section>
 
       <AboutSection />
-      <Footer /> 
-    </main>
+      <GallerySection/>
+      </>
   );
 }

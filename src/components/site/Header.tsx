@@ -39,23 +39,16 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="/" className="hover:text-[#d4a574] transition">Home</Link>
-            <Link href="#" className="hover:text-[#d4a574] transition">Charis Human Hair</Link>
-            <Link href="#" className="hover:text-[#d4a574] transition">Our Happy Customer</Link>
-            <Link href="#" className="hover:text-[#d4a574] transition">FAQ</Link>
-            <Link href="#" className="hover:text-[#d4a574] transition">Contact</Link>
-            <Link href="#" className="hover:text-[#d4a574] transition">About us</Link>
+            <Link href="/products" className="hover:text-[#d4a574] transition">Charis Human Hair</Link>
+            <Link href="/gallery" className="hover:text-[#d4a574] transition">Gallery</Link>
+            <Link href="/faq" className="hover:text-[#d4a574] transition">FAQ</Link>
+            <Link href="/contact" className="hover:text-[#d4a574] transition">Contact</Link>
+            <Link href="/aboutus" className="hover:text-[#d4a574] transition">About us</Link>
           </nav>
 
           {/* Right Icons */}
           <div className="flex items-center justify-end gap-4 flex-1">
-            <Search size={20} className="cursor-pointer hover:text-[#d4a574]" />
-            <User size={20} className="hidden md:block cursor-pointer hover:text-[#d4a574]" />
-            <div className="relative cursor-pointer">
-              <ShoppingBag size={20} className="hover:text-[#d4a574]" />
-              <span className="absolute -top-1 -right-1 bg-white text-[#37241d] text-[10px] font-bold px-1 rounded-full">
-                1
-              </span>
-            </div>
+           
           </div>
         </div>
 
@@ -85,28 +78,28 @@ export default function Header() {
         <nav className="flex flex-col py-2">
           <Link href="/" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">Home</Link>
           
-          <Link href="#" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10 flex items-center justify-between">
+          <Link href="/products" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10 flex items-center justify-between">
             Charis Human Hair
             <ChevronRight size={18} className="opacity-70" />
           </Link>
           
-          <Link href="#" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">Our Happy Customer</Link>
-          <Link href="#" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">FAQ</Link>
-          <Link href="#" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">Contact</Link>
-          <Link href="#" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">About us</Link>
+          <Link href="/gallery" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">Gallery</Link>
+          <Link href="/faq" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">FAQ</Link>
+          <Link href="/contact" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">Contact</Link>
+          <Link href="/aboutus" className="px-6 py-4 text-lg border-b border-white/5 hover:bg-black/10">About us</Link>
         </nav>
 
         {/* Sidebar Footer */}
         <div className="absolute bottom-10 left-0 w-full px-6 space-y-6">
-          <Link href="/account" className="flex items-center gap-3 text-sm hover:opacity-80">
+          <Link href="/login" className="flex items-center gap-3 text-sm hover:opacity-80">
             <User size={20} />
             Account
           </Link>
           
-          <div className="flex items-center gap-2 text-sm opacity-80 cursor-pointer">
+          {/* <div className="flex items-center gap-2 text-sm opacity-80 cursor-pointer">
             Australia | AUD $
             <ChevronDown size={14} />
-          </div>
+          </div> */}
         </div>
       </aside>
     </>
