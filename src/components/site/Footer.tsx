@@ -7,8 +7,8 @@ import {
   Mail, 
   MapPin, 
   ArrowUpRight,
-
-  Music2 // Used for TikTok
+  Music2, // Used for TikTok
+  User
 } from 'lucide-react';
 import { getCompanyProfile } from '@/services/company.service';
 
@@ -112,16 +112,7 @@ export default async function Footer() {
             desc="Guaranteed quality masterpieces" 
           />
           <TrustBadge 
-            icon={
-              <Image 
-                src="/logo.png" 
-                width={20} 
-                height={20} 
-                alt="Charis Logo Icon" 
-                className="opacity-40" 
-                style={{ height: 'auto' }}
-              />
-            } 
+            icon={<User className="text-[#d4a574]" size={24} />} 
             title="100% Human Hair" 
             desc="Ethically sourced & curated" 
           />

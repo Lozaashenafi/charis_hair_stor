@@ -38,11 +38,7 @@ export default function RegisterPage() {
 
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#d4a574]/20">
         <div className="bg-[#8b6545] p-10 flex flex-col items-center text-center">
-          {/* IMAGE FIXED: No more warnings */}
-          <div className="relative w-[140px] h-[50px] mb-4">
-                      <Image src="/logo.png" alt="Charis Logo" width={140} height={50} className="mb-4 object-contain" />
-            
-          </div>
+         
           <h1 className="text-white text-2xl font-serif tracking-tight">Create Account</h1>
           <p className="text-white/70 text-sm mt-1 uppercase tracking-widest">Join the Charis Family</p>
         </div>

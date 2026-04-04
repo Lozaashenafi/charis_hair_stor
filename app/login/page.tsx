@@ -45,7 +45,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#d4a574]/20">
         {/* Aesthetic Header */}
         <div className="bg-[#37241d] p-10 flex flex-col items-center text-center">
-          <Image src="/logo.png" alt="Charis Logo" width={140} height={50} className="mb-4 object-contain" />
+          <Image src="/logo.png" alt="Charis Logo"   style={{ width: '120px', height: 'auto' }} // This line stops the warning
+ className="mb-4 object-contain" />
           <h1 className="text-[#d4a574] text-2xl font-serif tracking-tight">Welcome Back</h1>
           <p className="text-[#f5f1ed]/50 text-sm mt-1 uppercase tracking-widest">Sign in to your account</p>
         </div>
