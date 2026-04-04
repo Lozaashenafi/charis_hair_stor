@@ -18,6 +18,7 @@ export default function Sidebar() {
     { href: '/admin/users', icon: <Users size={20}/>, label: 'Manage Team' },
     { href: '/admin/gallery', icon: <ImageIcon size={20}/>, label: 'Gallery' },
     { href: '/admin/profile', icon: <Building2 size={20}/>, label: 'Brand Info' },
+    { href: '/admin/messages', icon: <ShoppingBag size={20}/>, label: 'Messages' },
   ]
 
   return (

@@ -13,23 +13,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
+useEffect(() => {
+  let isMounted = true; // Prevents state updates on unmounted components
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
+  const fetchUser = async () => {
+    try {
+      // Use getSession first, it's faster for initial load
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (isMounted) {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Auth fetch error", err);
+      if (isMounted) setLoading(false);
     }
+  };
 
-    fetchUser()
+  fetchUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+  // Listen for changes (Login/Logout)
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    if (isMounted) {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    }
+  });
 
-    return () => subscription.unsubscribe()
-  }, [])
+  return () => {
+    isMounted = false;
+    subscription.unsubscribe();
+  };
+}, []);
 
   return (
     <AuthContext.Provider value={{ user, loading }}>

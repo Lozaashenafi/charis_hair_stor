@@ -178,3 +178,13 @@ export async function sendContactMessage(formData: FormData) {
     return { error: "Failed to send message. Please try again later." };
   }
 }
+
+export async function deleteMessage(id: number) {
+  try {
+    await db.delete(messages).where(eq(messages.id, id));
+    revalidatePath('/admin/messages');
+    return { success: true };
+  } catch (error) {
+    return { error: "Failed to delete" };
+  }
+}
