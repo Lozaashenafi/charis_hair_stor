@@ -1,6 +1,7 @@
 import { getGalleryImages } from "@/services/gallery.service";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+export const dynamic = 'force-dynamic';
 
 export default async function FullGalleryPage() {
   const images = await getGalleryImages();
