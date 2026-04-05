@@ -168,6 +168,9 @@ export async function deleteProduct(id: number) {
   try {
     await db.delete(hairProducts).where(eq(hairProducts.id, id));
     revalidatePath('/admin/products');
+    revalidatePath('/products');       // Update public list page
+    revalidatePath('/');               // Update home page (if products show there)
+    
     return { success: true };
   } catch (error) {
     console.error("Delete Error:", error);

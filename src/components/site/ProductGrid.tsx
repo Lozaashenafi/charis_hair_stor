@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import PublicProductModal from '@/components/site/PublicProductModal'
+export const revalidate = 0; // Ensures no cache at all
 
 interface ProductGridProps {
   products: any[];
