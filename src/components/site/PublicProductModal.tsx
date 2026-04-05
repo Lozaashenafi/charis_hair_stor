@@ -29,6 +29,7 @@ export default function PublicProductModal({ product, company, onClose }: { prod
     return categoryName.toLowerCase().includes('bundle');
   }, [categoryName]);
 
+  // --- DYNAMIC PRICE CALCULATION ---
   const selectedInchData = inches.find((i: any) => i.inches.toString() === selectedInch)
   const selectedColorData = colors.find((c: any) => c.color === selectedColor)
   
@@ -59,12 +60,13 @@ export default function PublicProductModal({ product, company, onClose }: { prod
       {/* Backdrop */}
       <div className="absolute inset-0 bg-[#37241d]/98 backdrop-blur-xl" onClick={onClose} />
       
-      <div className="relative bg-[#f5f1ed] w-full h-full md:h-[90vh] md:max-w-6xl md:rounded-[3rem] overflow-y-auto no-scrollbar shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
+      {/* MAIN MODAL CONTAINER */}
+      <div className="relative bg-[#f5f1ed] w-full h-full md:h-[90vh] md:max-w-6xl rounded-none overflow-y-auto no-scrollbar shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
         
         {/* FIXED CLOSE BUTTON */}
         <button 
           onClick={onClose} 
-          className="fixed md:absolute top-5 right-5 text-[#37241d] z-[120] bg-white/90 backdrop-blur-md p-3 rounded-full shadow-xl border border-[#8b6545]/10 active:scale-90"
+          className="fixed md:absolute top-5 right-5 text-[#37241d] z-[120] bg-white/90 backdrop-blur-md p-3 rounded-none shadow-xl border border-[#8b6545]/10 active:scale-90"
         >
           <X size={24} />
         </button>
@@ -76,35 +78,36 @@ export default function PublicProductModal({ product, company, onClose }: { prod
             <div className="relative w-full aspect-[4/5] md:aspect-auto md:flex-1 overflow-hidden group">
               <img 
                 src={images[activeImage]?.imageUrl} 
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-cover transition-all duration-700" 
                 alt={product.name} 
               />
 
               {images.length > 1 && (
                 <>
-                  <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/20 text-[#37241d] rounded-full backdrop-blur-md md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                  <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/20 text-[#37241d] rounded-none backdrop-blur-md md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                     <ChevronLeft size={28} />
                   </button>
-                  <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/20 text-[#37241d] rounded-full backdrop-blur-md md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                  <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/20 text-[#37241d] rounded-none backdrop-blur-md md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                     <ChevronRight size={28} />
                   </button>
                 </>
               )}
 
               {product.isOnSale && (
-                <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest px-5 py-2 rounded-full shadow-2xl">
+                <div className="absolute top-0 left-0 bg-red-700 text-white text-[9px] font-black uppercase tracking-widest px-5 py-2 shadow-2xl">
                   Sale
                 </div>
               )}
             </div>
 
+            {/* Thumbnail Strip */}
             {images.length > 1 && (
               <div className="flex gap-3 p-4 md:p-6 bg-white/40 border-t border-[#8b6545]/10 overflow-x-auto no-scrollbar scroll-smooth">
                 {images.map((img: any, idx: number) => (
                   <button 
                     key={idx} 
                     onClick={() => setActiveImage(idx)} 
-                    className={`relative w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 transition-all ${
+                    className={`relative w-16 h-16 md:w-20 md:h-20 rounded-none overflow-hidden flex-shrink-0 border-2 transition-all ${
                       activeImage === idx ? 'border-[#d4a574] scale-105' : 'border-transparent opacity-60'
                     }`}
                   >
@@ -119,7 +122,6 @@ export default function PublicProductModal({ product, company, onClose }: { prod
           <div className="w-full md:w-2/5 p-6 md:p-14 flex flex-col bg-white">
             <div className="space-y-10 flex-1">
               
-              {/* Identity Header */}
               <div>
                 <div className="flex items-center gap-3 mb-3">
                   <span className="text-[#8b6545] text-[9px] uppercase tracking-[0.4em] font-black border-r border-[#8b6545]/20 pr-4">
@@ -130,7 +132,7 @@ export default function PublicProductModal({ product, company, onClose }: { prod
                   </span>
                 </div>
                 <h2 className="font-serif text-3xl md:text-5xl text-[#37241d] mb-4 italic lowercase leading-tight">{product.name}</h2>
-                <div className="flex items-baseline gap-4">
+                <div className="flex items-baseline gap-4 transition-all duration-500">
                   <p className="text-[#37241d] font-serif text-3xl font-light italic">
                     ${displayPrice}
                   </p>
@@ -142,19 +144,18 @@ export default function PublicProductModal({ product, company, onClose }: { prod
                 </div>
               </div>
 
-              {/* BUNDLE CALCULATOR */}
               {isBundle && (
-                <div className="bg-[#8b6545]/5 border border-[#8b6545]/10 p-5 rounded-[2rem] space-y-4">
+                <div className="bg-[#8b6545]/5 border border-[#8b6545]/10 p-5 rounded-none space-y-4">
                   <div className="flex items-center gap-2 text-[#8b6545]">
                     <Info size={14} />
                     <span className="text-[9px] font-black uppercase tracking-widest">Bundle Pack Guide</span>
                   </div>
                   <div className="grid grid-cols-2 gap-3 text-center">
-                    <div className="bg-white p-3 rounded-2xl border border-[#8b6545]/10 shadow-sm">
+                    <div className="bg-white p-3 border border-[#8b6545]/10 shadow-sm">
                       <p className="text-[#8b6545] text-[8px] uppercase font-bold mb-1">3 Bundles</p>
                       <p className="text-lg text-[#37241d] font-serif italic">${(parseFloat(displayPrice) * 3).toFixed(2)}</p>
                     </div>
-                    <div className="bg-white p-3 rounded-2xl border border-[#8b6545]/10 shadow-sm">
+                    <div className="bg-white p-3 border border-[#8b6545]/10 shadow-sm">
                       <p className="text-[#8b6545] text-[8px] uppercase font-bold mb-1">4 Bundles</p>
                       <p className="text-lg text-[#37241d] font-serif italic">${(parseFloat(displayPrice) * 4).toFixed(2)}</p>
                     </div>
@@ -162,55 +163,61 @@ export default function PublicProductModal({ product, company, onClose }: { prod
                 </div>
               )}
 
-              {/* SPEC GRID */}
               <div className="grid grid-cols-2 gap-y-6 md:gap-y-8 py-8 border-y border-[#8b6545]/10">
                  <InfoRow label="Origin" value={product.origin} />
                  <InfoRow label="Texture" value={product.texture} />
                  <InfoRow label="Processing" value={product.processing} />
                  <InfoRow label="Details" value={product.options} />
               </div>
-
-              {/* COLOR SELECTOR (Dynamic Pricing & Stock Check) */}
-              {colors.length > 0 && (
-                <div>
-                  <h4 className="text-[9px] text-[#8b6545] uppercase tracking-widest mb-4 font-black flex items-center gap-2">
+              <div>
+                <h4 className="text-[9px] text-[#8b6545] uppercase tracking-widest mb-4 font-black flex items-center gap-2">
                     <Palette size={12} className="text-[#d4a574]" /> Select Shade
                   </h4>
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {colors.map((c: any) => {
-                      const isAvailable = c.isRestocked !== false;
-                      return (
-                        <button 
-                          key={c.id} 
-                          disabled={!isAvailable}
-                          onClick={() => setSelectedColor(c.color)}
-                          className={`min-h-[44px] px-5 py-2 rounded-xl text-[10px] uppercase tracking-widest transition-all border relative overflow-hidden ${
-                            !isAvailable 
-                            ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-200 text-gray-400' 
-                            : selectedColor === c.color 
-                              ? 'bg-[#37241d] text-[#d4a574] border-[#37241d] font-bold shadow-lg' 
-                              : 'bg-transparent border-[#8b6545]/20 text-[#37241d]'
-                          }`}
-                        >
-                          {/* Line through effect for out of stock */}
-                          {!isAvailable && <div className="absolute inset-0 flex items-center justify-center"><div className="w-full h-px bg-gray-400 rotate-12"></div></div>}
-                          
-                          <span className={!isAvailable ? 'line-through' : ''}>
-                            {c.color}
-                          </span>
-                          
-                          {isAvailable && c.additionalPrice > 0 && (
-                            <span className="block text-[8px] mt-0.5 opacity-70">
-                              +${(c.additionalPrice / 100).toFixed(2)}
-                            </span>
-                          )}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
+<div className="flex flex-wrap gap-2 md:gap-3">
+  
+  {colors.map((c: any) => {
+    const isAvailable = c.isRestocked !== false;
+    return (
+      <button 
+        key={c.id} 
+        disabled={!isAvailable}
+        onClick={() => setSelectedColor(c.color)}
+        className={`min-h-[44px] px-5 py-2 text-[10px] uppercase tracking-widest transition-all border relative overflow-hidden rounded-none ${
+          !isAvailable 
+          ? 'bg-[#e5e1dd] border-[#8b6545]/20 text-[#37241d]/50 cursor-not-allowed' // Visible but "disabled" look
+          : selectedColor === c.color 
+            ? 'bg-[#37241d] text-[#d4a574] border-[#37241d] font-bold shadow-lg' 
+            : 'bg-transparent border-[#8b6545]/20 text-[#37241d] hover:border-[#37241d]'
+        }`}
+      >
+        {/* Diagonal Strike-through for unavailable items */}
+        {!isAvailable && (
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div className="w-[120%] h-px bg-[#8b6545]/40 -rotate-[25deg]"></div>
+          </div>
+        )}
 
+        <span className={!isAvailable ? 'line-through decoration-[#37241d]/30' : ''}>
+          {c.color}
+        </span>
+        
+        {isAvailable && c.additionalPrice > 0 && (
+          <span className="block text-[8px] mt-0.5 opacity-70">
+            +${(c.additionalPrice / 100).toFixed(2)}
+          </span>
+        )}
+
+        {/* Small "Sold Out" indicator if you want to be extra clear */}
+        {!isAvailable && (
+          <span className="absolute bottom-0.5 left-0 w-full text-[6px] font-black text-[#8b6545]/60 text-center uppercase tracking-tighter">
+            Sold Out
+          </span>
+        )}
+      </button>
+    )
+  })}
+  </div>
+</div>
               {/* LENGTH SELECTOR */}
               {inches.length > 0 && (
                 <div>
@@ -222,7 +229,7 @@ export default function PublicProductModal({ product, company, onClose }: { prod
                       <button 
                         key={i.id} 
                         onClick={() => setSelectedInch(i.inches.toString())}
-                        className={`min-h-[44px] min-w-[55px] px-4 py-2 text-[12px] transition-all border rounded-xl ${
+                        className={`min-h-[44px] min-w-[55px] px-4 py-2 text-[12px] transition-all border rounded-none ${
                           selectedInch === i.inches.toString() 
                           ? 'bg-[#37241d] text-[#d4a574] border-[#37241d] font-bold shadow-lg' 
                           : 'border-[#8b6545]/20 text-[#37241d]'
@@ -236,26 +243,18 @@ export default function PublicProductModal({ product, company, onClose }: { prod
               )}
             </div>
 
-            {/* CALL TO ACTION */}
             <div className="mt-12 mb-10 md:mb-0 space-y-5">
               <a 
                 href={generateWhatsAppLink()}
                 target="_blank"
-                className={`w-full font-black py-5 md:py-6 text-[10px] uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all rounded-full shadow-2xl active:scale-95 ${
+                className={`w-full font-black py-5 md:py-6 text-[10px] uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all shadow-2xl active:scale-95 rounded-none ${
                   selectedColor && selectedInch 
                   ? 'bg-[#37241d] text-[#d4a574]' 
                   : 'bg-gray-100 text-gray-400 border border-gray-200 opacity-60'
                 }`}
               >
-                <MessageCircle size={18} />
-                Order via WhatsApp
+                <MessageCircle size={18} /> Order via WhatsApp
               </a>
-              
-              {(!selectedColor || !selectedInch) && (
-                <p className="text-[9px] text-[#8b6545] text-center uppercase tracking-widest italic opacity-50">
-                   Select shade & length to finalize price
-                </p>
-              )}
             </div>
           </div>
         </div>

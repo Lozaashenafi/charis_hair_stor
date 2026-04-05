@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react'
 import { Search, Menu, X, RotateCcw, Link, ArrowLeft } from 'lucide-react'
 import PublicProductModal from '@/components/site/PublicProductModal'
 import Image from 'next/image'
-
+export const dynamic = 'force-dynamic';
 export default function AllProductsClient({ products = [], company }: { products: any[], company: any }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('All')

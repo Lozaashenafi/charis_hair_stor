@@ -7,7 +7,7 @@ interface ProductGridProps {
   products: any[];
   company: any;
 }
-
+export const dynamic = 'force-dynamic';
 export default function ProductGrid({ products, company }: ProductGridProps) {
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
 
