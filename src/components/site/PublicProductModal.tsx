@@ -29,7 +29,6 @@ export default function PublicProductModal({ product, company, onClose }: { prod
     return categoryName.toLowerCase().includes('bundle');
   }, [categoryName]);
 
-  // --- DYNAMIC PRICE CALCULATION (Inches + Colors) ---
   const selectedInchData = inches.find((i: any) => i.inches.toString() === selectedInch)
   const selectedColorData = colors.find((c: any) => c.color === selectedColor)
   
