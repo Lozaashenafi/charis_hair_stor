@@ -68,8 +68,9 @@ export const hairColors = pgTable("hair_colors", {
     .references(() => hairProducts.id, { onDelete: "cascade" }),
 
   color: text("color").notNull(),
+  additionalPrice: integer("additional_price").default(0).notNull(), // Extra cost for this color
+  isRestocked: boolean("is_restocked").default(true).notNull(), // Control if clickable or just "seen"
 });
-
 /* =========================
    Categories
 ========================= */
@@ -143,6 +144,10 @@ export const messages = pgTable("messages", {
   message: text("message").notNull(),
   status: text("status").default("unread").notNull(), // unread | read | archived
   createdAt: timestamp("created_at").defaultNow(),
+});
+export const commonColors = pgTable("common_colors", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(), // e.g., "Natural Black", "613 Blonde", "Honey Brown"
 });
 
 /* =========================

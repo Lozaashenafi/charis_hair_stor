@@ -17,12 +17,27 @@ export default function NewProductPageForm({ categories }: { categories: Categor
   const [selectedCatId, setSelectedCatId] = useState<string>("")
   const [basePrice, setBasePrice] = useState<string>("0")
   
+  // Boutique Color List for Suggestions
+  const commonColors = [
+    'Black',
+    'Brown',
+    'Chocolate Brown',
+    'Honey Blonde',
+    'Burgundy',
+    'Piano Highlight',
+    'Highlight'
+  ]
+
+  // States
   const [inchesList, setInchesList] = useState([{ inches: '', additionalPrice: '0' }])
+  const [colorsList, setColorsList] = useState([{ name: '', additionalPrice: '0', isRestocked: true }])
 
   const addInchRow = () => setInchesList([...inchesList, { inches: '', additionalPrice: '0' }])
   const removeInchRow = (index: number) => setInchesList(inchesList.filter((_, i) => i !== index))
 
-  // Logic to detect Bundle category
+  const addColorRow = () => setColorsList([...colorsList, { name: '', additionalPrice: '0', isRestocked: true }])
+  const removeColorRow = (index: number) => setColorsList(colorsList.filter((_, i) => i !== index))
+
   const isBundleCategory = useMemo(() => {
     const cat = categories.find(c => c.id.toString() === selectedCatId);
     return cat?.name.toLowerCase().includes('bundle');
@@ -47,7 +62,15 @@ export default function NewProductPageForm({ categories }: { categories: Categor
       isOnSale: formData.get('isOnSale') === 'on',
       availability: 'in_hand',
       quantityInHand: parseInt(formData.get('quantityInHand') as string || '0'),
-      colors: formData.get('colors')?.toString().split(',').filter(Boolean).map((s: string) => s.trim()),
+      
+      colors: colorsList
+        .filter(c => c.name !== '')
+        .map(c => ({
+          name: c.name,
+          extra: Math.round(parseFloat(c.additionalPrice || '0') * 100),
+          restocked: c.isRestocked
+        })),
+
       inches: inchesList
         .filter(i => i.inches !== '')
         .map(i => ({ 
@@ -67,13 +90,13 @@ export default function NewProductPageForm({ categories }: { categories: Categor
     setLoading(false)
   }
 
-  const inputClass = "w-full bg-zinc-800 border border-zinc-500 p-4 rounded-xl text-sm text-white placeholder:text-zinc-400 outline-none focus:border-[#d4a574] transition-all";
+  const inputClass = "w-full bg-zinc-800 border border-zinc-500 p-4 rounded-xl text-sm text-white placeholder:text-zinc-400 outline-none focus:border-[#d4a574] transition-all shadow-inner";
   const labelClass = "text-xs uppercase tracking-widest text-white font-black block mb-2";
 
   return (
     <div className="max-w-6xl mx-auto pb-20 px-4">
       <header className="mb-10 mt-6 text-center lg:text-left">
-        <h1 className="font-serif text-4xl md:text-6xl text-[#37241d] italic lowercase">New Masterpiece.</h1>
+        <h1 className="font-serif text-4xl md:text-6xl text-[#37241d] italic lowercase leading-tight tracking-tighter">New Masterpiece.</h1>
         <p className="text-[#8b6545] text-[10px] uppercase tracking-[0.4em] font-black mt-4">Archive to Luxury Vault</p>
       </header>
       
@@ -135,20 +158,19 @@ export default function NewProductPageForm({ categories }: { categories: Categor
               </div>
             </div>
 
-            {/* BUNDLE CALCULATION DISPLAY */}
             {isBundleCategory && (
-              <div className="bg-[#8b6545]/20 border border-[#d4a574]/30 p-6 rounded-2xl animate-in fade-in zoom-in duration-300">
-                <div className="flex items-center gap-2 mb-4 text-[#d4a574]">
+              <div className="bg-[#8b6545]/20 border border-[#d4a574]/30 p-6 rounded-2xl animate-in fade-in zoom-in duration-300 text-center">
+                <div className="flex items-center justify-center gap-2 mb-4 text-[#d4a574]">
                   <Info size={16} />
                   <h4 className="text-[10px] uppercase font-black tracking-widest">Bundle Pricing Preview</h4>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-black/20 p-4 rounded-xl border border-white/5">
-                    <p className="text-white/50 text-[9px] uppercase font-bold mb-1">3 Bundle Price</p>
+                    <p className="text-white/50 text-[9px] uppercase font-bold mb-1">3 Bundles</p>
                     <p className="text-2xl text-white font-serif italic">${(parseFloat(basePrice || "0") * 3).toFixed(2)}</p>
                   </div>
                   <div className="bg-black/20 p-4 rounded-xl border border-white/5">
-                    <p className="text-white/50 text-[9px] uppercase font-bold mb-1">4 Bundle Price</p>
+                    <p className="text-white/50 text-[9px] uppercase font-bold mb-1">4 Bundles</p>
                     <p className="text-2xl text-white font-serif italic">${(parseFloat(basePrice || "0") * 4).toFixed(2)}</p>
                   </div>
                 </div>
@@ -156,7 +178,7 @@ export default function NewProductPageForm({ categories }: { categories: Categor
             )}
           </div>
 
-          {/* Section 2: Full Specs (RESTORED) */}
+          {/* Section 2: Specs */}
           <div className="space-y-6">
             <h3 className="text-[#d4a574] text-[10px] uppercase font-black border-b border-white/5 pb-3 tracking-widest">Specifications</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -177,66 +199,98 @@ export default function NewProductPageForm({ categories }: { categories: Categor
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               <div>
-                  <label className={labelClass}>Hair Type</label>
-                  <input name="hairType" placeholder="e.g. 13x4 Lace Wig" className={inputClass} />
-               </div>
+               <div><label className={labelClass}>Hair Type</label><input name="hairType" placeholder="e.g. 13x4 Wig" className={inputClass} /></div>
                <div>
                   <label className={labelClass}>Processing</label>
-                  <select name="processing" className={inputClass}>
-                    <option value="Raw Hair">Raw Hair</option>
-                    <option value="Processed">Processed</option>
-                  </select>
+                  <select name="processing" className={inputClass}><option value="Raw Hair">Raw Hair</option><option value="Processed">Processed</option></select>
                </div>
-               <div>
-                  <label className={labelClass}>Inventory (Stock)</label>
-                  <input name="quantityInHand" type="number" className={inputClass} placeholder="0" />
-               </div>
+               <div><label className={labelClass}>Inventory</label><input name="quantityInHand" type="number" className={inputClass} placeholder="0" /></div>
             </div>
           </div>
 
-          {/* Section 3: Lengths & Colors */}
+          {/* Section 3: Lengths */}
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b border-white/5 pb-3">
-              <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Inch Pricing (Dynamic)</h3>
+              <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Inch Pricing</h3>
               <button type="button" onClick={addInchRow} className="flex items-center gap-2 text-[#d4a574] text-[10px] font-bold border border-[#d4a574]/30 px-3 py-1 rounded-full hover:bg-[#d4a574]/10">
                 <Plus size={12} /> Add Length
               </button>
             </div>
-            
             <div className="space-y-3">
               {inchesList.map((row, index) => (
-                <div key={index} className="flex gap-4 items-end">
+                <div key={index} className="flex gap-4 items-end animate-in fade-in slide-in-from-left-2">
                   <div className="flex-1">
                     <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Inches</label>
                     <input type="number" placeholder="22" className={inputClass} value={row.inches} onChange={(e) => {
-                      const newList = [...inchesList];
-                      newList[index].inches = e.target.value;
-                      setInchesList(newList);
+                      const newList = [...inchesList]; newList[index].inches = e.target.value; setInchesList(newList);
                     }} />
                   </div>
                   <div className="flex-1">
-                    <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Extra Price ($)</label>
-                    <input type="number" step="0.01" placeholder="0.00" className={inputClass} value={row.additionalPrice} onChange={(e) => {
-                      const newList = [...inchesList];
-                      newList[index].additionalPrice = e.target.value;
-                      setInchesList(newList);
+                    <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Extra ($)</label>
+                    <input type="number" step="0.01" className={inputClass} value={row.additionalPrice} onChange={(e) => {
+                      const newList = [...inchesList]; newList[index].additionalPrice = e.target.value; setInchesList(newList);
                     }} />
                   </div>
-                  <button type="button" onClick={() => removeInchRow(index)} className="p-4 text-red-400 bg-red-400/10 rounded-xl hover:bg-red-400 hover:text-white transition-all">
-                    <Trash2 size={18} />
-                  </button>
+                  <button type="button" onClick={() => removeInchRow(index)} className="p-4 text-red-400 bg-red-400/10 rounded-xl hover:bg-red-400 hover:text-white transition-all"><Trash2 size={18} /></button>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="space-y-4">
-            <label className={labelClass}>Available Colors</label>
-            <input name="colors" type="text" className={inputClass} placeholder="Natural Black, #613, #1B (Comma separated)" />
+          {/* Section 4: SMART COLOR INPUT (Pick or Type) */}
+          <div className="space-y-6">
+            <div className="flex justify-between items-center border-b border-white/5 pb-3">
+              <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Color Variants & Stock</h3>
+              <button type="button" onClick={addColorRow} className="flex items-center gap-2 text-[#d4a574] text-[10px] font-bold border border-[#d4a574]/30 px-3 py-1 rounded-full hover:bg-[#d4a574]/10">
+                <Plus size={12} /> Add Color
+              </button>
+            </div>
+            
+            <div className="space-y-3">
+              {colorsList.map((row, index) => (
+                <div key={index} className="flex gap-3 items-end bg-black/20 p-5 rounded-2xl border border-white/5 transition-all animate-in fade-in slide-in-from-left-2">
+                  <div className="flex-[2]">
+                    <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Pick or Type Color</label>
+                    
+                    {/* SMART INPUT: List attribute connects to datalist below */}
+                    <input 
+                      list="boutique-colors" 
+                      className={inputClass} 
+                      placeholder="e.g. Natural Black" 
+                      value={row.name} 
+                      onChange={(e) => {
+                        const newList = [...colorsList]; newList[index].name = e.target.value; setColorsList(newList);
+                      }} 
+                    />
+                    
+                    {/* Suggestions Source */}
+                    <datalist id="boutique-colors">
+                      {commonColors.map(color => (
+                        <option key={color} value={color} />
+                      ))}
+                    </datalist>
+                  </div>
+
+                  <div className="flex-1">
+                    <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Extra ($)</label>
+                    <input type="number" step="0.01" className={inputClass} value={row.additionalPrice} onChange={(e) => {
+                      const newList = [...colorsList]; newList[index].additionalPrice = e.target.value; setColorsList(newList);
+                    }} />
+                  </div>
+
+                  <div className="flex flex-col items-center pb-2">
+                    <label className="text-[9px] text-white/40 uppercase font-bold mb-2">In Stock</label>
+                    <input type="checkbox" checked={row.isRestocked} className="w-6 h-6 accent-green-600 cursor-pointer" onChange={(e) => {
+                      const newList = [...colorsList]; newList[index].isRestocked = e.target.checked; setColorsList(newList);
+                    }} />
+                  </div>
+                  <button type="button" onClick={() => removeColorRow(index)} className="p-4 text-red-400 bg-red-400/10 rounded-xl hover:bg-red-400 hover:text-white transition-all"><Trash2 size={18} /></button>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <button disabled={loading} className="w-full bg-[#d4a574] text-[#37241d] font-black py-6 rounded-2xl shadow-2xl active:scale-95 transition-all uppercase tracking-widest text-xs">
+          <button disabled={loading} className="w-full bg-[#d4a574] text-[#37241d] font-black py-6 rounded-2xl shadow-2xl active:scale-95 transition-all uppercase tracking-widest text-xs mt-4">
             {loading ? 'SYNCHRONIZING...' : 'CREATE MASTERPIECE'}
           </button>
         </div>

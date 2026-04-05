@@ -53,8 +53,10 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center justify-end gap-4 flex-1">
-             {/* Icons can go here */}
-          </div>
+<Link href="/login" className="flex items-center gap-3 text-sm hover:opacity-80">
+            <User size={20} />
+            Account Login
+          </Link>          </div>
         </div>
 
         {/* Welcome Banner */}

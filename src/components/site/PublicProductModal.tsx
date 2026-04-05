@@ -29,10 +29,14 @@ export default function PublicProductModal({ product, company, onClose }: { prod
     return categoryName.toLowerCase().includes('bundle');
   }, [categoryName]);
 
-  // --- DYNAMIC PRICE CALCULATION ---
+  // --- DYNAMIC PRICE CALCULATION (Inches + Colors) ---
   const selectedInchData = inches.find((i: any) => i.inches.toString() === selectedInch)
-  const additionalCost = selectedInchData?.additionalPrice || 0
-  const totalPrice = product.price + additionalCost
+  const selectedColorData = colors.find((c: any) => c.color === selectedColor)
+  
+  const inchExtra = selectedInchData?.additionalPrice || 0
+  const colorExtra = selectedColorData?.additionalPrice || 0
+  
+  const totalPrice = product.price + inchExtra + colorExtra
   const displayPrice = (totalPrice / 100).toFixed(2)
 
   const generateWhatsAppLink = () => {
@@ -42,7 +46,7 @@ export default function PublicProductModal({ product, company, onClose }: { prod
     const categoryPart = `*Category:* ${categoryName}%0A`
     const colorPart = selectedColor ? `*Color:* ${selectedColor}%0A` : `*Color:* Not selected%0A`
     const inchPart = selectedInch ? `*Length:* ${selectedInch}"%0A` : `*Length:* Not selected%0A`
-    const pricePart = `*Price:* $${displayPrice}%0A`
+    const pricePart = `*Final Price:* $${displayPrice}%0A`
     const footer = `%0APlease let me know the availability.`
     
     return `${baseUrl}?text=${intro}${itemName}${categoryPart}${colorPart}${inchPart}${pricePart}${footer}`
@@ -56,10 +60,9 @@ export default function PublicProductModal({ product, company, onClose }: { prod
       {/* Backdrop */}
       <div className="absolute inset-0 bg-[#37241d]/98 backdrop-blur-xl" onClick={onClose} />
       
-      {/* MAIN MODAL CONTAINER - Scrollable on mobile */}
       <div className="relative bg-[#f5f1ed] w-full h-full md:h-[90vh] md:max-w-6xl md:rounded-[3rem] overflow-y-auto no-scrollbar shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
         
-        {/* FIXED CLOSE BUTTON (Mobile Friendly) */}
+        {/* FIXED CLOSE BUTTON */}
         <button 
           onClick={onClose} 
           className="fixed md:absolute top-5 right-5 text-[#37241d] z-[120] bg-white/90 backdrop-blur-md p-3 rounded-full shadow-xl border border-[#8b6545]/10 active:scale-90"
@@ -96,7 +99,6 @@ export default function PublicProductModal({ product, company, onClose }: { prod
               )}
             </div>
 
-            {/* Thumbnail Strip - Horizontal Scroll on Mobile */}
             {images.length > 1 && (
               <div className="flex gap-3 p-4 md:p-6 bg-white/40 border-t border-[#8b6545]/10 overflow-x-auto no-scrollbar scroll-smooth">
                 {images.map((img: any, idx: number) => (
@@ -135,25 +137,25 @@ export default function PublicProductModal({ product, company, onClose }: { prod
                   </p>
                   {product.isOnSale && product.previousPrice && (
                     <p className="text-gray-400 text-base line-through italic font-light">
-                      ${(product.previousPrice / 100).toFixed(2)}
+                      ${((product.previousPrice + inchExtra + colorExtra) / 100).toFixed(2)}
                     </p>
                   )}
                 </div>
               </div>
 
-              {/* BUNDLE CALCULATOR (Mobile Optimized) */}
+              {/* BUNDLE CALCULATOR */}
               {isBundle && (
                 <div className="bg-[#8b6545]/5 border border-[#8b6545]/10 p-5 rounded-[2rem] space-y-4">
                   <div className="flex items-center gap-2 text-[#8b6545]">
                     <Info size={14} />
                     <span className="text-[9px] font-black uppercase tracking-widest">Bundle Pack Guide</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-white p-3 rounded-2xl border border-[#8b6545]/10 shadow-sm text-center">
+                  <div className="grid grid-cols-2 gap-3 text-center">
+                    <div className="bg-white p-3 rounded-2xl border border-[#8b6545]/10 shadow-sm">
                       <p className="text-[#8b6545] text-[8px] uppercase font-bold mb-1">3 Bundles</p>
                       <p className="text-lg text-[#37241d] font-serif italic">${(parseFloat(displayPrice) * 3).toFixed(2)}</p>
                     </div>
-                    <div className="bg-white p-3 rounded-2xl border border-[#8b6545]/10 shadow-sm text-center">
+                    <div className="bg-white p-3 rounded-2xl border border-[#8b6545]/10 shadow-sm">
                       <p className="text-[#8b6545] text-[8px] uppercase font-bold mb-1">4 Bundles</p>
                       <p className="text-lg text-[#37241d] font-serif italic">${(parseFloat(displayPrice) * 4).toFixed(2)}</p>
                     </div>
@@ -169,26 +171,43 @@ export default function PublicProductModal({ product, company, onClose }: { prod
                  <InfoRow label="Details" value={product.options} />
               </div>
 
-              {/* COLOR SELECTOR */}
+              {/* COLOR SELECTOR (Dynamic Pricing & Stock Check) */}
               {colors.length > 0 && (
                 <div>
                   <h4 className="text-[9px] text-[#8b6545] uppercase tracking-widest mb-4 font-black flex items-center gap-2">
                     <Palette size={12} className="text-[#d4a574]" /> Select Shade
                   </h4>
                   <div className="flex flex-wrap gap-2 md:gap-3">
-                    {colors.map((c: any) => (
-                      <button 
-                        key={c.id} 
-                        onClick={() => setSelectedColor(c.color)}
-                        className={`min-h-[44px] px-5 py-2 rounded-xl text-[10px] uppercase tracking-widest transition-all border ${
-                          selectedColor === c.color 
-                          ? 'bg-[#37241d] text-[#d4a574] border-[#37241d] font-bold shadow-lg' 
-                          : 'bg-transparent border-[#8b6545]/20 text-[#37241d]'
-                        }`}
-                      >
-                        {c.color}
-                      </button>
-                    ))}
+                    {colors.map((c: any) => {
+                      const isAvailable = c.isRestocked !== false;
+                      return (
+                        <button 
+                          key={c.id} 
+                          disabled={!isAvailable}
+                          onClick={() => setSelectedColor(c.color)}
+                          className={`min-h-[44px] px-5 py-2 rounded-xl text-[10px] uppercase tracking-widest transition-all border relative overflow-hidden ${
+                            !isAvailable 
+                            ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-200 text-gray-400' 
+                            : selectedColor === c.color 
+                              ? 'bg-[#37241d] text-[#d4a574] border-[#37241d] font-bold shadow-lg' 
+                              : 'bg-transparent border-[#8b6545]/20 text-[#37241d]'
+                          }`}
+                        >
+                          {/* Line through effect for out of stock */}
+                          {!isAvailable && <div className="absolute inset-0 flex items-center justify-center"><div className="w-full h-px bg-gray-400 rotate-12"></div></div>}
+                          
+                          <span className={!isAvailable ? 'line-through' : ''}>
+                            {c.color}
+                          </span>
+                          
+                          {isAvailable && c.additionalPrice > 0 && (
+                            <span className="block text-[8px] mt-0.5 opacity-70">
+                              +${(c.additionalPrice / 100).toFixed(2)}
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -218,7 +237,7 @@ export default function PublicProductModal({ product, company, onClose }: { prod
               )}
             </div>
 
-            {/* CALL TO ACTION BUTTON */}
+            {/* CALL TO ACTION */}
             <div className="mt-12 mb-10 md:mb-0 space-y-5">
               <a 
                 href={generateWhatsAppLink()}
@@ -235,7 +254,7 @@ export default function PublicProductModal({ product, company, onClose }: { prod
               
               {(!selectedColor || !selectedInch) && (
                 <p className="text-[9px] text-[#8b6545] text-center uppercase tracking-widest italic opacity-50">
-                   Selection required to order
+                   Select shade & length to finalize price
                 </p>
               )}
             </div>
@@ -250,7 +269,7 @@ function InfoRow({ label, value }: { label: string, value: string }) {
   return (
     <div className="flex flex-col">
       <span className="text-[8px] uppercase tracking-widest text-[#8b6545] mb-2 font-bold">{label}</span>
-      <span className="text-[#37241d] text-sm font-serif italic leading-tight">{value || 'Boutique'}</span>
+      <span className="text-[#37241d] text-sm font-serif italic leading-tight">{value || 'Signature'}</span>
     </div>
   )
 }

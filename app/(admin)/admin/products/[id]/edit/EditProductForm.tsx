@@ -11,7 +11,15 @@ interface EditProductFormProps {
   categories: Category[];
 }
 interface HairImage { id: number; imageUrl: string; }
-interface HairColor { id: number; color: string; }
+
+// Updated to include Price and Stock status
+interface HairColor { 
+  id: number; 
+  color: string; 
+  additionalPrice: number; 
+  isRestocked: boolean; 
+}
+
 interface HairInch { id: number; inches: number; additionalPrice: number; }
 interface Category { id: number; name: string; }
 
@@ -36,6 +44,13 @@ interface ProductWithRelations {
 
 interface InchRow { inches: string; additionalPrice: string; }
 
+// New Interface for Color rows in state
+interface ColorRow {
+  name: string;
+  additionalPrice: string;
+  isRestocked: boolean;
+}
+
 export default function EditProductForm({ product, categories }: EditProductFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
@@ -45,6 +60,7 @@ export default function EditProductForm({ product, categories }: EditProductForm
   const [selectedCatId, setSelectedCatId] = useState<string>(product.categoryId?.toString() || "")
   const [currentPrice, setCurrentPrice] = useState<string>((product.price / 100).toString())
 
+  // State for dynamic inches pricing
   const [inchesList, setInchesList] = useState<InchRow[]>(
     product.inches.length > 0 
       ? product.inches.map((i) => ({ 
@@ -54,6 +70,17 @@ export default function EditProductForm({ product, categories }: EditProductForm
       : [{ inches: '', additionalPrice: '0' }]
   )
 
+  // NEW: State for dynamic color pricing & stock
+  const [colorsList, setColorsList] = useState<ColorRow[]>(
+    product.colors.length > 0
+      ? product.colors.map((c) => ({
+          name: c.color,
+          additionalPrice: (c.additionalPrice / 100).toString(),
+          isRestocked: c.isRestocked
+        }))
+      : [{ name: '', additionalPrice: '0', isRestocked: true }]
+  )
+
   // Logic to detect Bundle category
   const isBundleCategory = useMemo(() => {
     const cat = categories.find(c => c.id.toString() === selectedCatId);
@@ -61,7 +88,11 @@ export default function EditProductForm({ product, categories }: EditProductForm
   }, [selectedCatId, categories]);
 
   const addInchRow = (): void => setInchesList([...inchesList, { inches: '', additionalPrice: '0' }])
-  const removeInchRow = (index: number): void => setInchesList(inchesList.filter((_, i) => i !== index))
+  const removeInchRow = (index: number): void => setInchesList(inchesList.filter((_, i: number) => i !== index))
+
+  // NEW: Add/Remove for Colors
+  const addColorRow = (): void => setColorsList([...colorsList, { name: '', additionalPrice: '0', isRestocked: true }])
+  const removeColorRow = (index: number): void => setColorsList(colorsList.filter((_, i: number) => i !== index))
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -82,7 +113,16 @@ export default function EditProductForm({ product, categories }: EditProductForm
       isOnSale: formData.get('isOnSale') === 'on',
       availability: formData.get('availability') as string || 'in_hand',
       quantityInHand: parseInt(formData.get('quantityInHand') as string || '0'),
-      colors: formData.get('colors')?.toString().split(',').filter(Boolean).map((s: string) => s.trim()),
+      
+      // Updated Color Payload
+      colors: colorsList
+        .filter((c) => c.name !== '')
+        .map((c) => ({
+          name: c.name,
+          extra: Math.round(parseFloat(c.additionalPrice || '0') * 100),
+          restocked: c.isRestocked
+        })),
+
       inches: inchesList
         .filter((i: InchRow) => i.inches !== '')
         .map((i: InchRow) => ({ 
@@ -193,7 +233,7 @@ export default function EditProductForm({ product, categories }: EditProductForm
           )}
         </div>
 
-        {/* Section 2: Technical Specifications (ALL RESTORED) */}
+        {/* Section 2: Technical Specifications */}
         <div className="space-y-6 pt-4 border-t border-white/5">
           <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black mb-4">Product Specs</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -278,9 +318,63 @@ export default function EditProductForm({ product, categories }: EditProductForm
           </div>
         </div>
 
+        {/* Section 4: NEW - Dynamic Colors with Price & Stock */}
         <div className="space-y-6 pt-4 border-t border-white/5">
-          <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Available Colors</h3>
-          <input name="colors" defaultValue={product.colors.map((c) => c.color).join(', ')} className={inputClass} placeholder="Natural Black, #613, #1B" />
+          <div className="flex justify-between items-center">
+            <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Color Variants & Stock</h3>
+            <button type="button" onClick={addColorRow} className="flex items-center gap-2 text-[#d4a574] text-[10px] font-bold border border-[#d4a574]/30 px-3 py-1 rounded-full hover:bg-[#d4a574]/10">
+              <Plus size={12} /> Add Color
+            </button>
+          </div>
+          <div className="space-y-3">
+            {colorsList.map((row, index) => (
+              <div key={index} className="flex gap-3 items-end bg-black/20 p-4 border border-white/5 rounded-2xl transition-all">
+                <div className="flex-[2]">
+                  <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Color Name</label>
+                  <input 
+                    className={inputClass} 
+                    value={row.name} 
+                    placeholder="e.g. 613 Blonde"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const newList = [...colorsList];
+                      newList[index].name = e.target.value;
+                      setColorsList(newList);
+                    }} 
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Extra ($)</label>
+                  <input 
+                    type="number" 
+                    step="0.01" 
+                    className={inputClass} 
+                    value={row.additionalPrice} 
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const newList = [...colorsList];
+                      newList[index].additionalPrice = e.target.value;
+                      setColorsList(newList);
+                    }} 
+                  />
+                </div>
+                <div className="flex flex-col items-center pb-2">
+                  <label className="text-[9px] text-white/40 uppercase font-bold mb-2">In Stock</label>
+                  <input 
+                    type="checkbox" 
+                    checked={row.isRestocked} 
+                    className="w-6 h-6 accent-green-600 cursor-pointer" 
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const newList = [...colorsList];
+                      newList[index].isRestocked = e.target.checked;
+                      setColorsList(newList);
+                    }} 
+                  />
+                </div>
+                <button type="button" onClick={() => removeColorRow(index)} className="p-4 text-red-400 bg-red-400/10 rounded-xl hover:bg-red-400 hover:text-white transition-all">
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         <button disabled={loading} className="w-full bg-[#d4a574] text-[#37241d] font-black py-6 rounded-2xl hover:bg-white transition-all tracking-[0.3em] uppercase text-xs mt-6 shadow-2xl">
