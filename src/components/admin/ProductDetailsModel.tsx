@@ -77,26 +77,65 @@ export default function ProductDetailsModal({ product, onClose }: { product: any
               </div>
             </div>
 
-            {/* Section 2: Customization & Variants */}
+            {/* Section 2: Customization & Variants (UPDATED for Stock & Prices) */}
             <div className="space-y-6 pt-4">
               <h3 className="text-white text-[10px] uppercase tracking-[0.3em] font-black flex items-center gap-2 opacity-50">
                 <Palette size={14} /> Available Variations
               </h3>
-              <div className="space-y-4">
-                <DetailItem 
-                  icon={<Ruler size={16}/>} 
-                  label="Available Inches" 
-                  value={product.inches.length > 0 ? product.inches.map((i: any) => i.inches).join(', ') + '"' : 'N/A'} 
-                />
-                <DetailItem 
-                  icon={<Palette size={16}/>} 
-                  label="Available Colors" 
-                  value={product.colors.length > 0 ? product.colors.map((c: any) => c.color).join(', ') : 'N/A'} 
-                />
+              <div className="space-y-6 pl-6">
+<div>
+                  <div className="flex items-center gap-2 text-zinc-500 mb-3">
+                    <span className="text-[#5a3e00]"><Palette size={16} /></span>
+                    <span className="text-[9px] uppercase tracking-widest font-black">Length & Stock</span>
+                  </div>
+                  {product.inches && product.inches.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {product.inches.map((inch: any, idx: number) => (
+                        <div key={idx} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs ${inch.isInstock ? 'border-zinc-700 bg-zinc-800/50 text-white' : 'border-red-900/30 bg-red-900/10 text-zinc-500 line-through'}`}>
+                          <span>{inch.inches}"</span>
+                          {inch.additionalPrice > 0 && (
+                            <span className="text-[#5a3e00] font-bold text-[10px]">
+                              +${(inch.additionalPrice / 100).toFixed(2)}
+                            </span>
+                          )}
+                          <div className={`w-1.5 h-1.5 rounded-full ${inch.isInstock ? 'bg-green-500' : 'bg-red-500'}`} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-zinc-700 italic font-light text-sm">Not Specified</span>
+                  )}
+                </div>
+                {/* Colors rendering */}
+                <div>
+                  <div className="flex items-center gap-2 text-zinc-500 mb-3">
+                    <span className="text-[#5a3e00]"><Palette size={16} /></span>
+                    <span className="text-[9px] uppercase tracking-widest font-black">Colors & Stock</span>
+                  </div>
+                  {product.colors && product.colors.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {product.colors.map((color: any, idx: number) => (
+                        <div key={idx} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs ${color.isRestocked ? 'border-zinc-700 bg-zinc-800/50 text-white' : 'border-red-900/30 bg-red-900/10 text-zinc-500 line-through'}`}>
+                          <span>{color.color}</span>
+                          {color.additionalPrice > 0 && (
+                            <span className="text-[#5a3e00] font-bold text-[10px]">
+                              +${(color.additionalPrice / 100).toFixed(2)}
+                            </span>
+                          )}
+                          <div className={`w-1.5 h-1.5 rounded-full ${color.isRestocked ? 'bg-green-500' : 'bg-red-500'}`} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-zinc-700 italic font-light text-sm">Not Specified</span>
+                  )}
+                </div>
+
                 <DetailItem 
                   icon={<Database size={16}/>} 
                   label="Additional Options" 
                   value={product.options} 
+                  removePadding
                 />
               </div>
             </div>
@@ -109,6 +148,7 @@ export default function ProductDetailsModal({ product, onClose }: { product: any
                   icon={<Calendar size={16}/>} 
                   label="Availability" 
                   value={product.availability === 'in_hand' ? 'Immediate Shipping' : 'Custom Pre-Order'} 
+                  removePadding
                 />
                 <div className="flex items-center gap-3">
                   <span className="text-zinc-500 uppercase text-[10px] tracking-widest font-bold">In Hand:</span>
@@ -133,14 +173,14 @@ export default function ProductDetailsModal({ product, onClose }: { product: any
   )
 }
 
-function DetailItem({ icon, label, value }: { icon: React.ReactNode, label: string, value?: string | number | null }) {
+function DetailItem({ icon, label, value, removePadding = false }: { icon: React.ReactNode, label: string, value?: string | number | null, removePadding?: boolean }) {
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center gap-2 text-zinc-500">
         <span className="text-[#5a3e00]">{icon}</span>
         <span className="text-[9px] uppercase tracking-widest font-black">{label}</span>
       </div>
-      <span className="text-white text-sm font-medium pl-6">
+      <span className={`text-white text-sm font-medium ${removePadding ? '' : 'pl-6'}`}>
         {value && value !== "" ? value : <span className="text-zinc-700 italic font-light">Not Specified</span>}
       </span>
     </div>

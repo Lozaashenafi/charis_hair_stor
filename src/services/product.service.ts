@@ -38,7 +38,6 @@ export async function createHairProduct(data: any) {
         await tx.insert(hairImages).values(data.images.map((url: string) => ({ productId: product.id, imageUrl: url })));
       }
 
-      // NEW: Dynamic Color Insert
       if (data.colors?.length > 0) {
         await tx.insert(hairColors).values(
           data.colors.map((c: any) => ({ 
@@ -50,12 +49,17 @@ export async function createHairProduct(data: any) {
         );
       }
 
+      // NEW: Added isInstock to the insertion
       if (data.inches?.length > 0) {
         await tx.insert(hairInches).values(
-          data.inches.map((i: any) => ({ productId: product.id, inches: parseInt(i.value), additionalPrice: i.extra }))
+          data.inches.map((i: any) => ({ 
+            productId: product.id, 
+            inches: parseInt(i.value), 
+            additionalPrice: i.extra,
+            isInstock: i.isInstock 
+          }))
         );
       }
-
       revalidatePath('/admin/products');
       return { success: true };
     });
@@ -63,8 +67,6 @@ export async function createHairProduct(data: any) {
     return { success: false };
   }
 }
-
-/* --- UPDATE PRODUCT --- */
 export async function updateHairProduct(id: number, data: any) {
   try {
     return await db.transaction(async (tx) => {
@@ -93,11 +95,32 @@ export async function updateHairProduct(id: number, data: any) {
         );
       }
 
-      // ... rest of refresh logic for images/inches as before
+      // Refresh Inches (NEW: Added isInstock)
+      await tx.delete(hairInches).where(eq(hairInches.productId, id));
+      if (data.inches?.length > 0) {
+        await tx.insert(hairInches).values(
+          data.inches.map((i: any) => ({ 
+            productId: id, 
+            inches: parseInt(i.value), 
+            additionalPrice: i.extra,
+            isInstock: i.isInstock
+          }))
+        );
+      }
+
+      // Handle Images
+      if (data.images && data.images.length > 0) {
+        await tx.delete(hairImages).where(eq(hairImages.productId, id));
+        await tx.insert(hairImages).values(
+          data.images.map((url: string) => ({ productId: id, imageUrl: url }))
+        );
+      }
+
       revalidatePath('/admin/products');
       return { success: true };
     });
   } catch (error) {
+    console.error("Update Product Error:", error);
     return { success: false };
   }
 }
@@ -108,7 +131,8 @@ export async function updateHairProduct(id: number, data: any) {
 // Get single product with category and relations
 export async function getProductById(id: number) {
   try {
-    return await db.query.hairProducts.findFirst({
+   
+    const product = await db.query.hairProducts.findFirst({
       where: eq(hairProducts.id, id),
       with: {
         category: true, // Included Category
@@ -117,6 +141,8 @@ export async function getProductById(id: number) {
         inches: true,
       },
     });
+    console.log("Fetched Product:", product);
+    return product;
   } catch (error) {
     console.error("Error fetching product:", error);
     return null;
@@ -126,7 +152,8 @@ export async function getProductById(id: number) {
 // Get all products for admin table
 export async function getAdminProducts() {
   try {
-    return await db.query.hairProducts.findMany({
+     
+    const products = await db.query.hairProducts.findMany({
       with: {
         category: true, // Included Category
         images: true,
@@ -135,6 +162,9 @@ export async function getAdminProducts() {
       },
       orderBy: [desc(hairProducts.id)],
     });
+    console.log("Fetched Admin Products:", products[0].inches);
+    console.log("Fetched Admin Products:", products[0].colors);
+    return products;
   } catch (error) {
     console.error("Error fetching admin products:", error);
     return [];

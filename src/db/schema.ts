@@ -90,6 +90,7 @@ export const hairInches = pgTable("hair_inches", {
     .references(() => hairProducts.id, { onDelete: "cascade" }),
 
   inches: integer("inches").notNull(),
+  isInstock: boolean("is_instock").default(true).notNull(), 
   additionalPrice: integer("additional_price").default(0).notNull(), 
 });
 

@@ -15,6 +15,13 @@
       "when": 1775379358956,
       "tag": "0001_boring_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775633943872,
+      "tag": "0002_overconfident_lady_deathstrike",
+      "breakpoints": true
     }
   ]
 }

@@ -218,26 +218,56 @@ export default function PublicProductModal({ product, company, onClose }: { prod
   })}
   </div>
 </div>
-              {/* LENGTH SELECTOR */}
+ {/* LENGTH SELECTOR */}
               {inches.length > 0 && (
                 <div>
                   <h4 className="text-[9px] text-[#8b6545] uppercase tracking-widest mb-4 font-black flex items-center gap-2">
                     <Ruler size={12} className="text-[#d4a574]" /> Select Length
                   </h4>
                   <div className="flex flex-wrap gap-2 md:gap-3">
-                    {inches.map((i: any) => (
-                      <button 
-                        key={i.id} 
-                        onClick={() => setSelectedInch(i.inches.toString())}
-                        className={`min-h-[44px] min-w-[55px] px-4 py-2 text-[12px] transition-all border rounded-none ${
-                          selectedInch === i.inches.toString() 
-                          ? 'bg-[#37241d] text-[#d4a574] border-[#37241d] font-bold shadow-lg' 
-                          : 'border-[#8b6545]/20 text-[#37241d]'
-                        }`}
-                      >
-                        {i.inches}"
-                      </button>
-                    ))}
+                  {inches.map((i: any) => {
+                      const isAvailable = i.isInstock !== false;
+                      return (
+                        <button 
+                          key={i.id} 
+                          disabled={!isAvailable}
+                          onClick={() => setSelectedInch(i.inches.toString())}
+                          className={`min-h-[44px] px-5 py-2 text-[10px] uppercase tracking-widest transition-all border relative overflow-hidden rounded-none ${
+                            !isAvailable 
+                            ? 'bg-[#e5e1dd] border-[#8b6545]/20 text-[#37241d]/50 cursor-not-allowed' // Visible but "disabled" look
+                            : selectedInch === i.inches.toString() 
+                              ? 'bg-[#37241d] text-[#d4a574] border-[#37241d] font-bold shadow-lg' 
+                              : 'bg-transparent border-[#8b6545]/20 text-[#37241d] hover:border-[#37241d]'
+                          }`}
+                        >
+                          {/* Diagonal Strike-through for unavailable items */}
+                          {!isAvailable && (
+                            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                              <div className="w-[120%] h-px bg-[#8b6545]/40 -rotate-[25deg]"></div>
+                            </div>
+                          )}
+
+                          <span className={!isAvailable ? 'line-through decoration-[#37241d]/30' : ''}>
+                            {i.inches}"
+
+                          </span>
+                          
+                          {isAvailable && i.additionalPrice > 0 && (
+                            <span className="block text-[8px] mt-0.5 opacity-70">
+                              +${(i.additionalPrice / 100).toFixed(2)}
+                            </span>
+                          )}
+
+                          {/* Small "Sold Out" indicator if you want to be extra clear */}
+                          {!isAvailable && (
+                            <span className="absolute bottom-0.5 left-0 w-full text-[6px] font-black text-[#8b6545]/60 text-center uppercase tracking-tighter">
+                              Sold Out
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
+            
                   </div>
                 </div>
               )}

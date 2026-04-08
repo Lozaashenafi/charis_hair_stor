@@ -27,12 +27,12 @@ export default function NewProductPageForm({ categories }: { categories: Categor
     'Piano Highlight',
     'Highlight'
   ]
+  const [inchesList, setInchesList] = useState([{ inches: '', additionalPrice: '0', isInstock: true }])
+  const addInchRow = () => setInchesList([...inchesList, { inches: '', additionalPrice: '0', isInstock: true }])
 
   // States
-  const [inchesList, setInchesList] = useState([{ inches: '', additionalPrice: '0' }])
   const [colorsList, setColorsList] = useState([{ name: '', additionalPrice: '0', isRestocked: true }])
 
-  const addInchRow = () => setInchesList([...inchesList, { inches: '', additionalPrice: '0' }])
   const removeInchRow = (index: number) => setInchesList(inchesList.filter((_, i) => i !== index))
 
   const addColorRow = () => setColorsList([...colorsList, { name: '', additionalPrice: '0', isRestocked: true }])
@@ -70,12 +70,12 @@ export default function NewProductPageForm({ categories }: { categories: Categor
           extra: Math.round(parseFloat(c.additionalPrice || '0') * 100),
           restocked: c.isRestocked
         })),
-
       inches: inchesList
         .filter(i => i.inches !== '')
         .map(i => ({ 
           value: i.inches, 
-          extra: Math.round(parseFloat(i.additionalPrice) * 100) 
+          extra: Math.round(parseFloat(i.additionalPrice) * 100),
+          isInstock: i.isInstock
         })),
       images: imageUrls,
     }
@@ -211,15 +211,15 @@ export default function NewProductPageForm({ categories }: { categories: Categor
           {/* Section 3: Lengths */}
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b border-white/5 pb-3">
-              <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Inch Pricing</h3>
+              <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Inch Pricing & Stock</h3>
               <button type="button" onClick={addInchRow} className="flex items-center gap-2 text-[#d4a574] text-[10px] font-bold border border-[#d4a574]/30 px-3 py-1 rounded-full hover:bg-[#d4a574]/10">
                 <Plus size={12} /> Add Length
               </button>
             </div>
             <div className="space-y-3">
               {inchesList.map((row, index) => (
-                <div key={index} className="flex gap-4 items-end animate-in fade-in slide-in-from-left-2">
-                  <div className="flex-1">
+                <div key={index} className="flex gap-4 items-end bg-black/20 p-4 rounded-2xl border border-white/5 animate-in fade-in slide-in-from-left-2">
+                  <div className="flex-[2]">
                     <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Inches</label>
                     <input type="number" placeholder="22" className={inputClass} value={row.inches} onChange={(e) => {
                       const newList = [...inchesList]; newList[index].inches = e.target.value; setInchesList(newList);
@@ -229,6 +229,12 @@ export default function NewProductPageForm({ categories }: { categories: Categor
                     <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Extra ($)</label>
                     <input type="number" step="0.01" className={inputClass} value={row.additionalPrice} onChange={(e) => {
                       const newList = [...inchesList]; newList[index].additionalPrice = e.target.value; setInchesList(newList);
+                    }} />
+                  </div>
+                  <div className="flex flex-col items-center pb-2">
+                    <label className="text-[9px] text-white/40 uppercase font-bold mb-2">In Stock</label>
+                    <input type="checkbox" checked={row.isInstock} className="w-6 h-6 accent-green-600 cursor-pointer" onChange={(e) => {
+                      const newList = [...inchesList]; newList[index].isInstock = e.target.checked; setInchesList(newList);
                     }} />
                   </div>
                   <button type="button" onClick={() => removeInchRow(index)} className="p-4 text-red-400 bg-red-400/10 rounded-xl hover:bg-red-400 hover:text-white transition-all"><Trash2 size={18} /></button>

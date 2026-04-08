@@ -1,0 +1,1 @@
+ALTER TABLE "hair_inches" ADD COLUMN "is_instock" boolean DEFAULT true NOT NULL;

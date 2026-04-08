@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Edit2, Eye, Package, MapPin, Hash, ChevronRight } from 'lucide-react'
-import ProductDetailsModal from '@/components/admin/ProductDetailsModal'
+import ProductDetailsModal from '@/components/admin/ProductDetailsModel'
 import DeleteProductButton from '@/components/admin/DeleteProductButton'
 
 export default function ProductListClient({ products }: { products: any[] }) {

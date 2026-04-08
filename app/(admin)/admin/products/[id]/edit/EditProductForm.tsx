@@ -19,8 +19,9 @@ interface HairColor {
   additionalPrice: number; 
   isRestocked: boolean; 
 }
+interface HairInch { id: number; inches: number; additionalPrice: number; isInstock: boolean; }
+interface InchRow { inches: string; additionalPrice: string; isInstock: boolean; }
 
-interface HairInch { id: number; inches: number; additionalPrice: number; }
 interface Category { id: number; name: string; }
 
 interface ProductWithRelations {
@@ -42,7 +43,6 @@ interface ProductWithRelations {
   inches: HairInch[];
 }
 
-interface InchRow { inches: string; additionalPrice: string; }
 
 // New Interface for Color rows in state
 interface ColorRow {
@@ -61,14 +61,18 @@ export default function EditProductForm({ product, categories }: EditProductForm
   const [currentPrice, setCurrentPrice] = useState<string>((product.price / 100).toString())
 
   // State for dynamic inches pricing
-  const [inchesList, setInchesList] = useState<InchRow[]>(
+   const [inchesList, setInchesList] = useState<InchRow[]>(
     product.inches.length > 0 
       ? product.inches.map((i) => ({ 
           inches: i.inches.toString(), 
-          additionalPrice: (i.additionalPrice / 100).toString() 
+          additionalPrice: (i.additionalPrice / 100).toString(),
+          isInstock: i.isInstock ?? true
         }))
-      : [{ inches: '', additionalPrice: '0' }]
+      : [{ inches: '', additionalPrice: '0', isInstock: true }]
   )
+
+  const addInchRow = (): void => setInchesList([...inchesList, { inches: '', additionalPrice: '0', isInstock: true }])
+
 
   // NEW: State for dynamic color pricing & stock
   const [colorsList, setColorsList] = useState<ColorRow[]>(
@@ -87,7 +91,6 @@ export default function EditProductForm({ product, categories }: EditProductForm
     return cat?.name.toLowerCase().includes('bundle');
   }, [selectedCatId, categories]);
 
-  const addInchRow = (): void => setInchesList([...inchesList, { inches: '', additionalPrice: '0' }])
   const removeInchRow = (index: number): void => setInchesList(inchesList.filter((_, i: number) => i !== index))
 
   // NEW: Add/Remove for Colors
@@ -123,13 +126,15 @@ export default function EditProductForm({ product, categories }: EditProductForm
           restocked: c.isRestocked
         })),
 
-      inches: inchesList
+     
+      images: imageUrls,
+       inches: inchesList
         .filter((i: InchRow) => i.inches !== '')
         .map((i: InchRow) => ({ 
           value: i.inches, 
-          extra: Math.round(parseFloat(i.additionalPrice || '0') * 100) 
+          extra: Math.round(parseFloat(i.additionalPrice || '0') * 100),
+          isInstock: i.isInstock
         })),
-      images: imageUrls,
     }
 
     const res = await updateHairProduct(product.id, payload)
@@ -273,23 +278,23 @@ export default function EditProductForm({ product, categories }: EditProductForm
         </div>
 
         {/* Section 3: Dynamic Inches */}
-        <div className="space-y-6 pt-4 border-t border-white/5">
+         <div className="space-y-6 pt-4 border-t border-white/5">
           <div className="flex justify-between items-center">
-            <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Inch Pricing</h3>
+            <h3 className="text-[#d4a574] text-[10px] uppercase tracking-widest font-black">Inch Pricing & Stock</h3>
             <button type="button" onClick={addInchRow} className="flex items-center gap-2 text-[#d4a574] text-[10px] font-bold border border-[#d4a574]/30 px-3 py-1 rounded-full hover:bg-[#d4a574]/10">
               <Plus size={12} /> Add Length
             </button>
           </div>
           <div className="space-y-3">
             {inchesList.map((row, index) => (
-              <div key={index} className="flex gap-4 items-end">
-                <div className="flex-1">
+              <div key={index} className="flex gap-4 items-end bg-black/20 p-4 border border-white/5 rounded-2xl transition-all">
+                <div className="flex-[2]">
                   <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Inches</label>
                   <input 
                     type="number" 
                     className={inputClass} 
                     value={row.inches} 
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e) => {
                       const newList = [...inchesList];
                       newList[index].inches = e.target.value;
                       setInchesList(newList);
@@ -297,15 +302,28 @@ export default function EditProductForm({ product, categories }: EditProductForm
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Extra Price ($)</label>
+                  <label className="text-[9px] text-white/40 uppercase font-bold mb-1 block">Extra ($)</label>
                   <input 
                     type="number" 
                     step="0.01" 
                     className={inputClass} 
                     value={row.additionalPrice} 
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e) => {
                       const newList = [...inchesList];
                       newList[index].additionalPrice = e.target.value;
+                      setInchesList(newList);
+                    }} 
+                  />
+                </div>
+                <div className="flex flex-col items-center pb-2">
+                  <label className="text-[9px] text-white/40 uppercase font-bold mb-2">In Stock</label>
+                  <input 
+                    type="checkbox" 
+                    checked={row.isInstock} 
+                    className="w-6 h-6 accent-green-600 cursor-pointer" 
+                    onChange={(e) => {
+                      const newList = [...inchesList];
+                      newList[index].isInstock = e.target.checked;
                       setInchesList(newList);
                     }} 
                   />
